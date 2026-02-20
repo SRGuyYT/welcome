@@ -1,224 +1,1195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sky0Cloud v4</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sky0Cloud welcome portal with modern glass UI, accessibility features, and responsive cloud-inspired experience." />
+  <title>Sky0Cloud • Welcome Portal</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Typography: clean futuristic base font with high readability -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-<style>
-:root {
-  --emerald: #0dbd8b;
-  --glass-bg: rgba(255,255,255,0.05);
-  --glass-border: rgba(255,255,255,0.1);
-  --bg-url: url('https://picsum.photos/1920/1080');
-}
+  <style>
+    /* ======================================================================
+       SKY0CLOUD WELCOME PORTAL STYLESHEET
+       ----------------------------------------------------------------------
+       Architecture:
+       1) Theme Tokens / CSS Variables
+       2) Reset + Base
+       3) Layout primitives
+       4) Reusable components
+       5) Feature sections
+       6) Animations
+       7) Media queries (mobile-first)
+       ====================================================================== */
 
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+    /* -----------------------------
+       1) Theme Tokens / Variables
+       ----------------------------- */
+    :root {
+      --font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
 
-body {
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: var(--bg-url) center/cover no-repeat;
-  overflow:hidden;
-}
+      /* Core brand colors */
+      --brand-primary: #1de9b6;
+      --brand-secondary: #76a9ff;
+      --brand-accent: #9f7aea;
+      --brand-warning: #f8d54f;
+      --brand-danger: #ff5d7a;
 
-.panel {
-  width:90%;
-  max-width:1200px;
-  padding:50px;
-  border-radius:30px;
-  backdrop-filter: blur(20px);
-  background: var(--glass-bg);
-  border:1px solid var(--glass-border);
-  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-  text-align:center;
-  display:flex;
-  flex-direction:column;
-  gap:30px;
-}
+      /* Dark theme defaults */
+      --bg: #070b16;
+      --bg-soft: #0f1830;
+      --surface: rgba(255, 255, 255, 0.06);
+      --surface-strong: rgba(255, 255, 255, 0.14);
+      --surface-hover: rgba(255, 255, 255, 0.18);
+      --text: #ecf1ff;
+      --text-muted: #b3c0de;
+      --text-subtle: #7f8db0;
+      --border: rgba(255, 255, 255, 0.18);
 
-/* Logo */
-.logo {
-  width:140px;
-  height:auto;
-  margin:0 auto;
-  filter: drop-shadow(0 0 20px var(--emerald));
-}
+      /* Glass + effects */
+      --glass-bg: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.03));
+      --glass-border: 1px solid rgba(255,255,255,0.22);
+      --glass-blur: 20px;
+      --glow-primary: 0 0 38px rgba(29, 233, 182, 0.35);
+      --glow-accent: 0 0 45px rgba(118, 169, 255, 0.28);
 
-/* Header */
-.header h1 { font-size:36px; font-weight:700; color:white; margin-bottom:5px; }
-.header p { opacity:0.75; font-size:16px; }
+      /* Radius & spacing scales */
+      --radius-xs: 0.5rem;
+      --radius-sm: 0.75rem;
+      --radius-md: 1rem;
+      --radius-lg: 1.4rem;
+      --radius-xl: 1.9rem;
+      --radius-pill: 9999px;
 
-/* Buttons */
-.buttons {
-  display:flex;
-  gap:20px;
-  justify-content:center;
-  flex-wrap: wrap;
-}
-.btn-primary, .btn-secondary {
-  padding:15px 30px;
-  border-radius:15px;
-  font-weight:600;
-  font-size:16px;
-  cursor:pointer;
-  transition: all 0.3s ease;
-  min-width:130px;
-}
-.btn-primary {
-  background: var(--emerald);
-  color:white;
-  border:none;
-}
-.btn-primary:hover { box-shadow:0 0 20px var(--emerald); transform:scale(1.05);}
-.btn-secondary {
-  background: transparent;
-  color:white;
-  border:1px solid white;
-}
-.btn-secondary:hover { background: rgba(255,255,255,0.1); transform:scale(1.05);}
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
 
-/* Cards */
-.cards {
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-  gap:25px;
-  margin-top:20px;
-}
-.card {
-  position: relative;
-  padding:20px;
-  border-radius:25px;
-  backdrop-filter: blur(20px);
-  background: rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  cursor:pointer;
-  overflow:hidden;
-  transition: all 0.3s ease;
-}
-.card::before {
-  content:"";
-  position:absolute;
-  top:-50%;
-  left:-50%;
-  width:200%;
-  height:200%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.15), transparent);
-  transform: rotate(25deg);
-  opacity:0;
-  transition:0.5s;
-}
-.card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-.card:hover::before { opacity:1; animation: shine 1.5s linear infinite; }
-@keyframes shine { from { transform: translateX(-100%) rotate(25deg); } to { transform: translateX(100%) rotate(25deg); } }
+      /* Shadows */
+      --shadow-soft: 0 12px 34px rgba(2, 6, 20, 0.45);
+      --shadow-medium: 0 20px 54px rgba(2, 6, 20, 0.55);
+      --shadow-hard: 0 24px 88px rgba(2, 6, 20, 0.7);
 
-.card h3 { margin-bottom:10px; font-weight:600; font-size:18px; }
-.card p { font-size:14px; opacity:0.75; line-height:1.4; max-height:40px; overflow:hidden; transition: max-height 0.3s ease; }
+      /* Motion */
+      --dur-fast: 160ms;
+      --dur-med: 280ms;
+      --dur-slow: 560ms;
+      --ease-standard: cubic-bezier(0.2, 0.65, 0.2, 1);
 
-/* Expanded card info */
-.card.expanded p { max-height:200px; }
+      --content-max-width: 1200px;
+    }
 
-/* Web Clients Section */
-.clients {
-  display:flex;
-  gap:15px;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-top:20px;
-}
-.client-btn {
-  padding:10px 20px;
-  border-radius:12px;
-  background: rgba(255,255,255,0.1);
-  color:white;
-  text-decoration:none;
-  font-weight:600;
-  transition: all 0.3s ease;
-}
-.client-btn:hover { background: var(--emerald); color:white; transform:scale(1.05); }
+    /* Light theme variable overrides */
+    html[data-theme="light"] {
+      --bg: #eff4ff;
+      --bg-soft: #dde7fd;
+      --surface: rgba(255, 255, 255, 0.64);
+      --surface-strong: rgba(255, 255, 255, 0.85);
+      --surface-hover: rgba(255, 255, 255, 0.95);
+      --text: #11213f;
+      --text-muted: #304266;
+      --text-subtle: #5f7198;
+      --border: rgba(20, 42, 84, 0.16);
+      --glass-bg: linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.58));
+      --glass-border: 1px solid rgba(255,255,255,0.75);
+      --shadow-soft: 0 10px 28px rgba(82, 106, 145, 0.24);
+      --shadow-medium: 0 20px 42px rgba(83, 109, 148, 0.3);
+      --shadow-hard: 0 32px 70px rgba(83, 109, 148, 0.36);
+    }
 
-/* Language & Notify */
-.bottom-bar {
-  display:flex;
-  gap:15px;
-  justify-content:center;
-  margin-top:20px;
-}
-.language-select {
-  padding:10px 15px;
-  border-radius:12px;
-  border:none;
-  font-size:14px;
-  background: rgba(255,255,255,0.1);
-  color:white;
-  outline:none;
-}
-.notify-btn {
-  padding:12px 25px;
-  border-radius:15px;
-  border:none;
-  background: #FFD700;
-  font-weight:600;
-  cursor:pointer;
-  transition: all 0.3s ease;
-}
-.notify-btn:hover { box-shadow:0 0 15px #FFD700; transform: scale(1.05); }
-</style>
+    /* -----------------------------
+       2) Reset + Base
+       ----------------------------- */
+    *, *::before, *::after { box-sizing: border-box; }
 
-<script>
-  // Session Bypass
-  const token = localStorage.getItem('login_token');
-  if(token) window.location.href = '/#/home';
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      scroll-behavior: smooth;
+    }
 
-  // Card expand on click
-  function toggleCard(card) {
-    card.classList.toggle('expanded');
-  }
+    body {
+      font-family: var(--font-family);
+      color: var(--text);
+      background:
+        radial-gradient(1300px 700px at 85% -20%, rgba(126, 167, 255, 0.28), transparent 55%),
+        radial-gradient(1200px 640px at -10% 0%, rgba(29, 233, 182, 0.22), transparent 48%),
+        linear-gradient(160deg, var(--bg) 0%, #091127 52%, #0f1b39 100%);
+      overflow-x: hidden;
+      line-height: 1.5;
+      letter-spacing: 0.01em;
+      transition: background var(--dur-slow) var(--ease-standard), color var(--dur-med) var(--ease-standard);
+    }
 
-  // Button functions
-  function createAccount(){ url("https://sky0cloud.dpdns.org/#/regisetor"); }
-  function signIn(){ url("https://sky0cloud.dpdns.org/#/login"); }
-  function notify(){ Notification.requestPermission(); }
-</script>
+    html[data-theme="light"] body {
+      background:
+        radial-gradient(1300px 700px at 85% -20%, rgba(126, 167, 255, 0.22), transparent 55%),
+        radial-gradient(1200px 640px at -10% 0%, rgba(29, 233, 182, 0.2), transparent 48%),
+        linear-gradient(160deg, #ecf3ff 0%, #e6eeff 52%, #dbe8ff 100%);
+    }
 
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, select {
+      font: inherit;
+      color: inherit;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--brand-primary);
+      outline-offset: 2px;
+      border-radius: 0.4rem;
+    }
+
+    /* -----------------------------
+       3) Layout Primitives
+       ----------------------------- */
+    .app-shell {
+      position: relative;
+      min-height: 100vh;
+      isolation: isolate;
+    }
+
+    .ambient-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      opacity: 0.95;
+    }
+
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 4px 4px;
+      opacity: 0.06;
+      mix-blend-mode: soft-light;
+    }
+
+    .layout-wrap {
+      width: min(100% - 2rem, var(--content-max-width));
+      margin-inline: auto;
+    }
+
+    /* -----------------------------
+       4) Reusable Components
+       ----------------------------- */
+    .glass {
+      background: var(--glass-bg);
+      border: var(--glass-border);
+      box-shadow: var(--shadow-soft);
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      backdrop-filter: blur(var(--glass-blur));
+    }
+
+    .top-nav {
+      position: sticky;
+      top: var(--space-3);
+      z-index: 20;
+      margin-top: var(--space-4);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-pill);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      animation: liftIn var(--dur-slow) var(--ease-standard) both;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-logo {
+      width: 2.3rem;
+      aspect-ratio: 1;
+      border-radius: 0.55rem;
+      box-shadow: var(--glow-primary);
+    }
+
+    .nav-links {
+      display: none;
+      gap: var(--space-2);
+    }
+
+    .nav-link {
+      padding: 0.52rem 0.9rem;
+      border-radius: var(--radius-pill);
+      color: var(--text-muted);
+      transition: transform var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard);
+    }
+
+    .nav-link:hover,
+    .nav-link[aria-current="page"] {
+      color: var(--text);
+      background: var(--surface);
+      transform: translateY(-1px);
+    }
+
+    .nav-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: var(--radius-pill);
+      padding: 0.45rem 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--text-muted);
+      transition: all var(--dur-med) var(--ease-standard);
+    }
+
+    .chip:hover {
+      color: var(--text);
+      transform: translateY(-1px);
+      border-color: rgba(29, 233, 182, 0.35);
+      box-shadow: var(--glow-primary);
+    }
+
+    .icon-btn {
+      width: 2.3rem;
+      height: 2.3rem;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: all var(--dur-fast) var(--ease-standard);
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: var(--glow-accent);
+      border-color: rgba(118, 169, 255, 0.48);
+    }
+
+    .hero {
+      margin-top: var(--space-8);
+      border-radius: var(--radius-xl);
+      padding: clamp(1.1rem, 2.6vw, 2.3rem);
+      display: grid;
+      gap: var(--space-8);
+      align-items: center;
+      position: relative;
+      overflow: clip;
+      animation: liftIn 700ms var(--ease-standard) 120ms both;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(18px);
+      opacity: 0.55;
+    }
+
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      right: -70px;
+      top: -80px;
+      background: radial-gradient(circle, rgba(29, 233, 182, 0.45), transparent 70%);
+    }
+
+    .hero::after {
+      width: 260px;
+      height: 260px;
+      left: -90px;
+      bottom: -130px;
+      background: radial-gradient(circle, rgba(118, 169, 255, 0.52), transparent 70%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: var(--space-4);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .dot-live {
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 50%;
+      background: var(--brand-primary);
+      box-shadow: 0 0 0 0 rgba(29, 233, 182, 0.7);
+      animation: pulseLive 1.6s infinite;
+    }
+
+    .hero-title {
+      font-size: clamp(1.85rem, 5vw, 3.4rem);
+      line-height: 1.1;
+      margin: 0 0 var(--space-4);
+      max-width: 16ch;
+      text-wrap: balance;
+    }
+
+    .hero-desc {
+      margin: 0;
+      max-width: 65ch;
+      color: var(--text-muted);
+      font-size: clamp(0.96rem, 2.3vw, 1.08rem);
+    }
+
+    .hero-cta-row {
+      margin-top: var(--space-6);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: var(--radius-pill);
+      padding: 0.82rem 1.2rem;
+      transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard);
+      user-select: none;
+    }
+
+    .btn-primary {
+      color: #072227;
+      background: linear-gradient(130deg, var(--brand-primary), #9effe6);
+      box-shadow: var(--glow-primary);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 0 3px rgba(29, 233, 182, 0.18), 0 18px 32px rgba(29, 233, 182, 0.27);
+    }
+
+    .btn-secondary {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      background: var(--surface-hover);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+
+    .metric {
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      background: linear-gradient(140deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      transition: transform var(--dur-med) var(--ease-standard);
+    }
+
+    .metric:hover { transform: translateY(-2px); }
+
+    .metric strong {
+      display: block;
+      font-size: clamp(1.15rem, 3.4vw, 1.7rem);
+      margin-bottom: 0.15rem;
+    }
+
+    .metric span {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .section {
+      margin-top: var(--space-10);
+    }
+
+    .section-head {
+      margin-bottom: var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(1.22rem, 3vw, 1.65rem);
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      margin: 0.15rem 0 0;
+      font-size: 0.95rem;
+      max-width: 64ch;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .feature-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      padding: var(--space-5);
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      transition: transform var(--dur-med) var(--ease-standard), border-color var(--dur-med) var(--ease-standard);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(29, 233, 182, 0.45);
+    }
+
+    .feature-icon {
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: var(--radius-sm);
+      display: grid;
+      place-items: center;
+      background: rgba(29, 233, 182, 0.18);
+      border: 1px solid rgba(29, 233, 182, 0.35);
+      font-size: 1.1rem;
+    }
+
+    .feature-card h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-top: auto;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 0.26rem 0.58rem;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .clients-wrap {
+      display: grid;
+      gap: var(--space-3);
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .client-link {
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      color: var(--text-muted);
+      transition: transform var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard);
+    }
+
+    .client-link:hover {
+      color: var(--text);
+      transform: translateY(-2px);
+      background: var(--surface-hover);
+    }
+
+    .status-panel {
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      display: grid;
+      gap: var(--space-4);
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .progress {
+      width: 100%;
+      height: 0.6rem;
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.09);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress > span {
+      display: block;
+      height: 100%;
+      width: 72%;
+      background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+      animation: shimmer 2.2s linear infinite;
+      background-size: 200% 100%;
+    }
+
+    .settings-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      align-items: center;
+    }
+
+    .select {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 0.52rem 0.8rem;
+      min-width: 145px;
+    }
+
+    .footer {
+      margin: var(--space-12) 0 var(--space-8);
+      color: var(--text-subtle);
+      font-size: 0.86rem;
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* -----------------------------
+       5) Device-specific enhancements
+       ----------------------------- */
+    .device-badge {
+      font-size: 0.75rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 0.26rem 0.66rem;
+      background: rgba(255,255,255,0.03);
+    }
+
+    [data-device="mobile"] .hero-title {
+      max-width: 13ch;
+    }
+
+    [data-device="tablet"] .hero {
+      gap: var(--space-6);
+    }
+
+    [data-device="desktop"] .hero {
+      grid-template-columns: 1.28fr 1fr;
+    }
+
+    /* -----------------------------
+       6) Animations
+       ----------------------------- */
+    @keyframes liftIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes pulseLive {
+      0% { box-shadow: 0 0 0 0 rgba(29, 233, 182, 0.72); }
+      70% { box-shadow: 0 0 0 12px rgba(29, 233, 182, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(29, 233, 182, 0); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* -----------------------------
+       7) Responsive breakpoints
+       ----------------------------- */
+    @media (min-width: 720px) {
+      .nav-links { display: inline-flex; }
+      .card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .layout-wrap {
+        width: min(100% - 3rem, var(--content-max-width));
+      }
+      .card-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .hero {
+        padding: clamp(1.8rem, 3vw, 2.8rem);
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="panel">
-  <img src="logo.png" alt="Sky0Cloud Logo" class="logo">
+  <canvas id="ambientCanvas" class="ambient-canvas" aria-hidden="true"></canvas>
+  <div class="noise-overlay" aria-hidden="true"></div>
 
-  <div class="header">
-    <h1>Welcome to Sky0Cloud v4</h1>
-    <p>An AIO for Messaing, Calling, Video Calling and 1:1 talks</p>
+  <div class="app-shell" id="appShell" data-device="desktop">
+    <div class="layout-wrap">
+      <!-- Sticky, glassmorphism navigation with keyboard-friendly controls -->
+      <header class="top-nav glass" role="banner">
+        <a href="#welcome" class="brand" aria-label="Sky0Cloud homepage">
+          <img src="logo.png" class="brand-logo" alt="Sky0Cloud Logo" />
+          <span>Sky0Cloud</span>
+        </a>
+
+        <nav aria-label="Primary" class="nav-links">
+          <a class="nav-link" href="#features" aria-current="page">Features</a>
+          <a class="nav-link" href="#clients">Clients</a>
+          <a class="nav-link" href="#status">Status</a>
+        </nav>
+
+        <div class="nav-actions">
+          <span class="chip" id="deviceChip" aria-live="polite">
+            <span>Device:</span>
+            <strong id="deviceLabel">Desktop</strong>
+          </span>
+          <button class="icon-btn" id="themeToggle" aria-label="Toggle dark and light mode" title="Toggle theme">☼</button>
+        </div>
+      </header>
+
+      <main id="welcome" tabindex="-1">
+        <!-- Hero section -->
+        <section class="hero glass" aria-labelledby="heroTitle">
+          <div>
+            <div class="eyebrow">
+              <span class="dot-live" aria-hidden="true"></span>
+              SECURE MATRIX COMMUNICATION CLOUD
+            </div>
+            <h1 id="heroTitle" class="hero-title">Welcome to Sky0Cloud v4 — your mission-ready communications cockpit.</h1>
+            <p class="hero-desc">
+              A modern, high-availability environment for messaging, voice, video, and private 1:1 collaboration.
+              Built for speed, privacy, and a polished experience across desktop, tablet, and mobile.
+            </p>
+
+            <div class="hero-cta-row" role="group" aria-label="Account actions">
+              <a class="btn btn-primary" href="https://sky0cloud.dpdns.org/#/regisetor" target="_blank" rel="noopener noreferrer">Create Account</a>
+              <a class="btn btn-secondary" href="https://sky0cloud.dpdns.org/#/login" target="_blank" rel="noopener noreferrer">Sign In</a>
+              <button class="btn btn-secondary" id="notifyBtn" type="button">Enable Notifications</button>
+            </div>
+          </div>
+
+          <aside aria-label="Platform stats">
+            <div class="metrics-grid">
+              <article class="metric glass">
+                <strong>99.95%</strong>
+                <span>Realtime messaging uptime</span>
+              </article>
+              <article class="metric glass">
+                <strong>40ms</strong>
+                <span>Global average event latency</span>
+              </article>
+              <article class="metric glass">
+                <strong>E2EE</strong>
+                <span>End-to-end encryption available</span>
+              </article>
+              <article class="metric glass">
+                <strong>24/7</strong>
+                <span>Moderation & service monitoring</span>
+              </article>
+            </div>
+          </aside>
+        </section>
+
+        <!-- Feature cards -->
+        <section class="section" id="features" aria-labelledby="featuresTitle">
+          <div class="section-head">
+            <div>
+              <h2 id="featuresTitle" class="section-title">Core Experience</h2>
+              <p class="section-subtitle">Everything users need to onboard quickly, communicate confidently, and scale across communities.</p>
+            </div>
+            <span class="device-badge" id="layoutModeLabel">Adaptive layout</span>
+          </div>
+
+          <div class="card-grid">
+            <article class="feature-card glass" tabindex="0" aria-label="Getting started resources">
+              <div class="feature-icon" aria-hidden="true">🚀</div>
+              <h3>Getting Started</h3>
+              <p>Step-by-step launch flow, practical onboarding checklist, and quick-start videos to get connected in minutes.</p>
+              <div class="tag-row"><span class="tag">Beginner-friendly</span><span class="tag">Guides</span></div>
+            </article>
+
+            <article class="feature-card glass" tabindex="0" aria-label="Community rules and security policy">
+              <div class="feature-icon" aria-hidden="true">🛡️</div>
+              <h3>Rules & Safety</h3>
+              <p>Clear behavioral standards, trust-and-safety controls, and moderation policy to maintain a healthy community.</p>
+              <div class="tag-row"><span class="tag">Compliance</span><span class="tag">Moderation</span></div>
+            </article>
+
+            <article class="feature-card glass" tabindex="0" aria-label="Cloud services and integrations">
+              <div class="feature-icon" aria-hidden="true">☁️</div>
+              <h3>Services</h3>
+              <p>Explore cloud-hosted tooling, client integrations, federation options, and deployment best-practice references.</p>
+              <div class="tag-row"><span class="tag">Cloud tools</span><span class="tag">Integrations</span></div>
+            </article>
+
+            <article class="feature-card glass" tabindex="0" aria-label="Community events and participation">
+              <div class="feature-icon" aria-hidden="true">🌐</div>
+              <h3>Community</h3>
+              <p>Meet collaborators, join events, and discover channels that match your interests across the Sky0Cloud network.</p>
+              <div class="tag-row"><span class="tag">Events</span><span class="tag">Networking</span></div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Web client links -->
+        <section class="section" id="clients" aria-labelledby="clientsTitle">
+          <div class="section-head">
+            <div>
+              <h2 id="clientsTitle" class="section-title">Web Matrix Clients</h2>
+              <p class="section-subtitle">Pick your preferred interface while staying connected to the same Sky0Cloud ecosystem.</p>
+            </div>
+          </div>
+
+          <div class="clients-wrap">
+            <a href="https://sky0cloud.dpdns.org" class="client-link" target="_blank" rel="noopener noreferrer" aria-label="Open Element client">
+              <span>Element (default)</span><span aria-hidden="true">↗</span>
+            </a>
+            <a href="https://app.cinny.in/login/sky0cloud.dpdns.org" class="client-link" target="_blank" rel="noopener noreferrer" aria-label="Open Cinny client">
+              <span>Cinny</span><span aria-hidden="true">↗</span>
+            </a>
+            <a href="https://fluffychat.im/web/" class="client-link" target="_blank" rel="noopener noreferrer" aria-label="Open FluffyChat client">
+              <span>FluffyChat</span><span aria-hidden="true">↗</span>
+            </a>
+            <a href="https://app.schildi.chat/" class="client-link" target="_blank" rel="noopener noreferrer" aria-label="Open SchildiChat client">
+              <span>SchildiChat</span><span aria-hidden="true">↗</span>
+            </a>
+            <a href="https://app.tammy.connect2x.de/" class="client-link" target="_blank" rel="noopener noreferrer" aria-label="Open Tammy client">
+              <span>Tammy</span><span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- Status + quick settings -->
+        <section class="section" id="status" aria-labelledby="statusTitle">
+          <div class="section-head">
+            <div>
+              <h2 id="statusTitle" class="section-title">Service Status & Preferences</h2>
+              <p class="section-subtitle">At-a-glance service confidence and user preferences for language and notification behavior.</p>
+            </div>
+          </div>
+
+          <article class="status-panel glass" aria-label="System health panel">
+            <div class="status-row">
+              <strong>Core service health</strong>
+              <span class="chip"><span class="dot-live" aria-hidden="true"></span> Operational</span>
+            </div>
+            <div class="progress" aria-label="Service uptime progress">
+              <span></span>
+            </div>
+            <div class="settings-row">
+              <label for="langSelect" class="sr-only">Select language</label>
+              <select id="langSelect" class="select" aria-label="Select language">
+                <option value="en" selected>English</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+                <option value="fr">Français</option>
+              </select>
+              <button class="btn btn-secondary" id="accessibilityBtn" type="button">Accessibility Tips</button>
+            </div>
+          </article>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>© <span id="year"></span> Sky0Cloud. Built for resilient communication.</span>
+        <span id="envNote">Adaptive mode active.</span>
+      </footer>
+    </div>
   </div>
 
-  <!-- Buttons -->
-  <div class="buttons">
-    <button class="btn-primary" onclick="createAccount()">Create Account</button>
-    <button class="btn-secondary" onclick="signIn()">Sign In</button>
-  </div>
+  <script>
+    /**
+     * ======================================================================
+     * SKY0CLOUD WELCOME PORTAL SCRIPT
+     * ----------------------------------------------------------------------
+     * Modules:
+     * 1) App state + utility helpers
+     * 2) Theme management (dark/light, persisted)
+     * 3) Device detection + adaptive labels
+     * 4) Notification + UI interaction handlers
+     * 5) Canvas particle engine for cloud/space ambience
+     * 6) Motion-safe animation hooks
+     * ======================================================================
+     */
 
-  <!-- Cards -->
-  <div class="cards">
-    <div class="card" onclick="toggleCard(this)"><h3>Getting Started</h3><p>Learn how to join and connect instantly. Full guide, video tutorials, and helpful tips to get you started quickly.</p></div>
-    <div class="card" onclick="toggleCard(this)"><h3>Rules</h3><p>Stay safe and follow guidelines. Includes chat rules, server etiquette, and moderation policies to protect the community.</p></div>
-    <div class="card" onclick="toggleCard(this)"><h3>Services</h3><p>Explore hosting, cloud tools, and Matrix clients. Learn how to manage your cloud environment and integrations efficiently.</p></div>
-    <div class="card" onclick="toggleCard(this)"><h3>Community</h3><p>Join discussions, meet other users, participate in events, and be part of the growing Sky0Cloud network.</p></div>
-  </div>
+    // ----------------------------------------------------------------------
+    // 1) App state + helper references
+    // ----------------------------------------------------------------------
+    const appState = {
+      theme: 'dark',
+      deviceType: 'desktop',
+      reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    };
 
-  <!-- Web Matrix Clients -->
-  <div class="clients">
-    <a href="https://sky0cloud.dpdns.org" class="client-btn" target="_blank">Element (The one your using)</a>
-    <a href="https://app.cinny.in/login/sky0cloud.dpdns.org" class="client-btn" target="_blank">Cinny</a>
-    <a href="https://fluffychat.im/web/" class="client-btn" target="_blank">FluffyChat</a>
-    <a href="https://app.schildi.chat/" class="client-btn" target="_blank">SchildiChat</a>
-    <a href="https://app.tammy.connect2x.de/" class="client-btn" target="_blank">Tammy</a>
-  </div>
-    <button class="notify-btn" onclick="notify()">Enable Notifications</button>
-  </div>
+    const refs = {
+      root: document.documentElement,
+      appShell: document.getElementById('appShell'),
+      themeToggle: document.getElementById('themeToggle'),
+      deviceLabel: document.getElementById('deviceLabel'),
+      deviceChip: document.getElementById('deviceChip'),
+      layoutModeLabel: document.getElementById('layoutModeLabel'),
+      notifyBtn: document.getElementById('notifyBtn'),
+      accessibilityBtn: document.getElementById('accessibilityBtn'),
+      envNote: document.getElementById('envNote'),
+      year: document.getElementById('year'),
+      langSelect: document.getElementById('langSelect'),
+      canvas: document.getElementById('ambientCanvas'),
+    };
+
+    // Auto-forward if existing auth token exists.
+    (function redirectIfAuthenticated() {
+      const token = localStorage.getItem('login_token');
+      if (token) {
+        window.location.href = '/#/home';
+      }
+    })();
+
+    // ----------------------------------------------------------------------
+    // 2) Theme management
+    // ----------------------------------------------------------------------
+    function applyTheme(theme) {
+      appState.theme = theme;
+      refs.root.setAttribute('data-theme', theme);
+      refs.themeToggle.textContent = theme === 'dark' ? '☼' : '☾';
+      refs.themeToggle.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`);
+      localStorage.setItem('sky0cloud-theme', theme);
+    }
+
+    function initializeTheme() {
+      const stored = localStorage.getItem('sky0cloud-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(stored || (prefersDark ? 'dark' : 'light'));
+    }
+
+    function toggleTheme() {
+      const next = appState.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    }
+
+    // ----------------------------------------------------------------------
+    // 3) Device detection + adaptive mode
+    // ----------------------------------------------------------------------
+    function detectDeviceType() {
+      const width = window.innerWidth;
+      if (width < 700) return 'mobile';
+      if (width < 1024) return 'tablet';
+      return 'desktop';
+    }
+
+    function applyDeviceMode() {
+      appState.deviceType = detectDeviceType();
+      refs.appShell.setAttribute('data-device', appState.deviceType);
+      const label = appState.deviceType.charAt(0).toUpperCase() + appState.deviceType.slice(1);
+      refs.deviceLabel.textContent = label;
+      refs.layoutModeLabel.textContent = `${label} optimized layout`;
+      refs.envNote.textContent = `${label} adaptive mode active.`;
+    }
+
+    // ----------------------------------------------------------------------
+    // 4) Interaction handlers + accessibility helpers
+    // ----------------------------------------------------------------------
+    async function enableNotifications() {
+      if (!('Notification' in window)) {
+        alert('Notifications are not supported in this browser.');
+        return;
+      }
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        new Notification('Sky0Cloud notifications enabled.', {
+          body: 'You will now receive important service updates and alerts.',
+          icon: 'logo.png',
+        });
+      }
+    }
+
+    function showAccessibilityTips() {
+      const message = [
+        'Accessibility shortcuts:',
+        '• Use Tab/Shift+Tab to move through interactive controls.',
+        '• Press Enter/Space on focused buttons and cards.',
+        '• Theme toggle supports high-contrast dark/light adaptation.',
+        '• Motion respects your system-level reduced-motion preference.',
+      ].join('\n');
+
+      alert(message);
+    }
+
+    function onLanguageChange(event) {
+      const selected = event.target.value;
+      localStorage.setItem('sky0cloud-lang', selected);
+    }
+
+    function initializeLanguagePreference() {
+      const lang = localStorage.getItem('sky0cloud-lang');
+      if (lang) refs.langSelect.value = lang;
+    }
+
+    // ----------------------------------------------------------------------
+    // 5) Ambient particle engine (canvas)
+    // ----------------------------------------------------------------------
+    const particleEngine = {
+      ctx: null,
+      particles: [],
+      rafId: null,
+      pointer: { x: -9999, y: -9999 },
+
+      init() {
+        if (!refs.canvas) return;
+        this.ctx = refs.canvas.getContext('2d');
+        this.resize();
+        this.spawnParticles();
+        this.bindEvents();
+        this.animate();
+      },
+
+      bindEvents() {
+        window.addEventListener('resize', () => this.resize());
+        window.addEventListener('pointermove', (e) => {
+          this.pointer.x = e.clientX;
+          this.pointer.y = e.clientY;
+        });
+        window.addEventListener('pointerleave', () => {
+          this.pointer.x = -9999;
+          this.pointer.y = -9999;
+        });
+      },
+
+      resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        refs.canvas.width = Math.floor(width * dpr);
+        refs.canvas.height = Math.floor(height * dpr);
+        refs.canvas.style.width = `${width}px`;
+        refs.canvas.style.height = `${height}px`;
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      },
+
+      spawnParticles() {
+        const baseCount = appState.deviceType === 'mobile' ? 40 : appState.deviceType === 'tablet' ? 70 : 95;
+        this.particles = Array.from({ length: baseCount }, () => ({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          r: Math.random() * 2 + 0.5,
+          vx: (Math.random() - 0.5) * 0.45,
+          vy: (Math.random() - 0.5) * 0.45,
+          alpha: Math.random() * 0.55 + 0.2,
+        }));
+      },
+
+      stepParticle(p) {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < -10) p.x = window.innerWidth + 10;
+        if (p.x > window.innerWidth + 10) p.x = -10;
+        if (p.y < -10) p.y = window.innerHeight + 10;
+        if (p.y > window.innerHeight + 10) p.y = -10;
+
+        // subtle pointer attraction for micro-interaction depth
+        const dx = this.pointer.x - p.x;
+        const dy = this.pointer.y - p.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < 140) {
+          p.x -= dx * 0.0025;
+          p.y -= dy * 0.0025;
+        }
+      },
+
+      drawParticle(p) {
+        const { ctx } = this;
+        const isDark = appState.theme === 'dark';
+        const color = isDark
+          ? `rgba(133, 183, 255, ${p.alpha})`
+          : `rgba(34, 88, 179, ${Math.min(p.alpha, 0.5)})`;
+        ctx.beginPath();
+        ctx.fillStyle = color;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      },
+
+      drawLinks() {
+        const { ctx, particles } = this;
+        for (let i = 0; i < particles.length; i += 1) {
+          for (let j = i + 1; j < particles.length; j += 1) {
+            const a = particles[i];
+            const b = particles[j];
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 110) {
+              const opacity = ((110 - dist) / 110) * 0.13;
+              ctx.beginPath();
+              ctx.strokeStyle = appState.theme === 'dark'
+                ? `rgba(160, 205, 255, ${opacity})`
+                : `rgba(70, 120, 210, ${opacity})`;
+              ctx.lineWidth = 1;
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          }
+        }
+      },
+
+      animate() {
+        if (!this.ctx) return;
+
+        if (appState.reducedMotion) {
+          this.renderStatic();
+          return;
+        }
+
+        const loop = () => {
+          this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+          for (const p of this.particles) {
+            this.stepParticle(p);
+            this.drawParticle(p);
+          }
+
+          this.drawLinks();
+          this.rafId = requestAnimationFrame(loop);
+        };
+
+        this.rafId = requestAnimationFrame(loop);
+      },
+
+      renderStatic() {
+        this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        for (const p of this.particles) this.drawParticle(p);
+        this.drawLinks();
+      },
+
+      refreshDensity() {
+        this.spawnParticles();
+      },
+    };
+
+    // ----------------------------------------------------------------------
+    // 6) Initialization
+    // ----------------------------------------------------------------------
+    function bindEvents() {
+      refs.themeToggle.addEventListener('click', () => {
+        toggleTheme();
+        if (particleEngine.ctx) particleEngine.renderStatic();
+      });
+
+      refs.notifyBtn.addEventListener('click', enableNotifications);
+      refs.accessibilityBtn.addEventListener('click', showAccessibilityTips);
+      refs.langSelect.addEventListener('change', onLanguageChange);
+
+      window.addEventListener('resize', () => {
+        const prev = appState.deviceType;
+        applyDeviceMode();
+        if (prev !== appState.deviceType) {
+          particleEngine.refreshDensity();
+        }
+      });
+
+      // keyboard shortcut: "t" toggles theme when no input is focused
+      document.addEventListener('keydown', (event) => {
+        const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
+        if (!isTyping && event.key.toLowerCase() === 't') {
+          toggleTheme();
+          if (particleEngine.ctx) particleEngine.renderStatic();
+        }
+      });
+    }
+
+    function init() {
+      initializeTheme();
+      initializeLanguagePreference();
+      applyDeviceMode();
+      bindEvents();
+      particleEngine.init();
+      refs.year.textContent = new Date().getFullYear();
+    }
+
+    init();
+  </script>
 </body>
 </html>
