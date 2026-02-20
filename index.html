@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sky0Cloud Welcome v4</title>
+<title>Sky0Cloud v4</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -180,8 +180,8 @@ body {
   }
 
   // Button functions
-  function createAccount(){ alert("Redirect to Create Account page"); }
-  function signIn(){ alert("Redirect to Sign In page"); }
+  function createAccount(){ url("https://sky0cloud.dpdns.org/#/regisetor"); }
+  function signIn(){ url("https://sky0cloud.dpdns.org/#/login"); }
   function notify(){ Notification.requestPermission(); }
 </script>
 
@@ -193,7 +193,7 @@ body {
 
   <div class="header">
     <h1>Welcome to Sky0Cloud v4</h1>
-    <p>Next-gen cloud & community hub inside Element</p>
+    <p>An AIO for Messaing, Calling, Video Calling and 1:1 talks</p>
   </div>
 
   <!-- Buttons -->
@@ -204,33 +204,21 @@ body {
 
   <!-- Cards -->
   <div class="cards">
-    <div class="card" onclick="toggleCard(this)"><h3>🚀 Getting Started</h3><p>Learn how to join and connect instantly. Full guide, video tutorials, and helpful tips to get you started quickly.</p></div>
-    <div class="card" onclick="toggleCard(this)"><h3>📜 Rules</h3><p>Stay safe and follow guidelines. Includes chat rules, server etiquette, and moderation policies to protect the community.</p></div>
-    <div class="card" onclick="toggleCard(this)"><h3>🌐 Services</h3><p>Explore hosting, cloud tools, and Matrix clients. Learn how to manage your cloud environment and integrations efficiently.</p></div>
-    <div class="card" onclick="toggleCard(this)"><h3>💬 Community</h3><p>Join discussions, meet other users, participate in events, and be part of the growing Sky0Cloud network.</p></div>
+    <div class="card" onclick="toggleCard(this)"><h3>Getting Started</h3><p>Learn how to join and connect instantly. Full guide, video tutorials, and helpful tips to get you started quickly.</p></div>
+    <div class="card" onclick="toggleCard(this)"><h3>Rules</h3><p>Stay safe and follow guidelines. Includes chat rules, server etiquette, and moderation policies to protect the community.</p></div>
+    <div class="card" onclick="toggleCard(this)"><h3>Services</h3><p>Explore hosting, cloud tools, and Matrix clients. Learn how to manage your cloud environment and integrations efficiently.</p></div>
+    <div class="card" onclick="toggleCard(this)"><h3>Community</h3><p>Join discussions, meet other users, participate in events, and be part of the growing Sky0Cloud network.</p></div>
   </div>
 
   <!-- Web Matrix Clients -->
   <div class="clients">
-    <a href="https://app.element.io" class="client-btn" target="_blank">Element Web</a>
-    <a href="https://element.io/get-started#desktop" class="client-btn" target="_blank">Element Desktop</a>
-    <a href="https://nheko.im/" class="client-btn" target="_blank">Nheko</a>
-    <a href="https://fluffychat.im/" class="client-btn" target="_blank">FluffyChat</a>
-    <a href="https://github.com/vector-im/riot-ios" class="client-btn" target="_blank">iOS Client</a>
-    <a href="https://github.com/vector-im/riot-android" class="client-btn" target="_blank">Android Client</a>
+    <a href="https://sky0cloud.dpdns.org" class="client-btn" target="_blank">Element (The one your using)</a>
+    <a href="https://app.cinny.in/login/sky0cloud.dpdns.org" class="client-btn" target="_blank">Cinny</a>
+    <a href="https://fluffychat.im/web/" class="client-btn" target="_blank">FluffyChat</a>
+    <a href="https://app.schildi.chat/" class="client-btn" target="_blank">SchildiChat</a>
+    <a href="https://app.tammy.connect2x.de/" class="client-btn" target="_blank">Tammy</a>
   </div>
-
-  <!-- Bottom Bar -->
-  <div class="bottom-bar">
-    <select class="language-select">
-      <option value="en">English</option>
-      <option value="es">Español</option>
-      <option value="fr">Français</option>
-      <option value="de">Deutsch</option>
-      <option value="zh">中文</option>
-    </select>
     <button class="notify-btn" onclick="notify()">Enable Notifications</button>
   </div>
-</div>
 </body>
 </html>
