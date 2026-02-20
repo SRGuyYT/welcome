@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sky0Cloud Welcome</title>
+
+<!-- Dynamic Background Script -->
+<script>
+  const bgUrl = `https://picsum.photos/1920/1080?random=${new Date().getDate()}`;
+  document.documentElement.style.setProperty('--bg-url', `url(${bgUrl})`);
+</script>
+
+<!-- Session Bypass -->
+<script>
+  const token = localStorage.getItem('login_token');
+  if (token) window.location.href = '/#/home';
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --emerald: #0dbd8b;
+  --glass-bg: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.1);
+  --bg-url: url('https://picsum.photos/1920/1080');
+}
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+
+body {
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: var(--bg-url) center/cover no-repeat;
+  overflow:hidden;
+}
+
+/* Panel Container */
+.panel {
+  width: 90%;
+  max-width: 1100px;
+  padding: 40px;
+  border-radius: 30px;
+  backdrop-filter: blur(20px);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+  text-align:center;
+  z-index:1;
+}
+
+/* Logo */
+.logo {
+  width:120px;
+  height:auto;
+  margin:0 auto 20px;
+  filter: drop-shadow(0 0 20px var(--emerald));
+}
+
+/* Header Text */
+.header h1 { font-size:36px; font-weight:700; color:white; }
+.header p { opacity:0.75; margin-top:5px; font-size:16px; }
+
+/* Buttons */
+.btn-primary {
+  background: var(--emerald);
+  color:white;
+  padding:15px 30px;
+  border-radius:15px;
+  border:none;
+  font-weight:600;
+  font-size:16px;
+  margin:15px 10px;
+  cursor:pointer;
+  transition: all 0.3s ease;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 20px var(--emerald);
+  transform: scale(1.05);
+}
+
+.btn-secondary {
+  background: transparent;
+  color:white;
+  padding:15px 30px;
+  border-radius:15px;
+  border:1px solid white;
+  font-weight:600;
+  font-size:16px;
+  cursor:pointer;
+  transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.05);
+}
+
+/* Cards Grid */
+.cards {
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+  margin-top:30px;
+}
+
+/* Liquid Glass Cards */
+.card {
+  position: relative;
+  padding:20px;
+  border-radius:25px;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  cursor:pointer;
+  overflow:hidden;
+  transition: all 0.3s ease;
+}
+.card::before {
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: rotate(25deg);
+  opacity:0;
+  transition:0.5s;
+}
+.card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+.card:hover::before { opacity:1; animation: shine 1.5s linear infinite; }
+@keyframes shine { from { transform: translateX(-100%) rotate(25deg); } to { transform: translateX(100%) rotate(25deg); } }
+
+.card h3 { margin-bottom:10px; font-weight:600; font-size:18px; }
+.card p { font-size:14px; opacity:0.75; line-height:1.4; }
+
+/* Language Picker */
+.language-select {
+  margin-top:25px;
+  padding:10px 15px;
+  border-radius:15px;
+  border:none;
+  font-size:14px;
+  background: rgba(255,255,255,0.1);
+  color:white;
+  outline:none;
+}
+
+/* Notification Button */
+.notify-btn {
+  margin-top:20px;
+  padding:12px 25px;
+  border-radius:15px;
+  border:none;
+  background: #FFD700;
+  font-weight:600;
+  cursor:pointer;
+  transition: all 0.3s ease;
+}
+.notify-btn:hover { box-shadow: 0 0 15px #FFD700; transform: scale(1.05); }
+
+</style>
+</head>
+
+<body>
+<div class="panel">
+  <img src="logo.png" alt="Sky0Cloud Logo" class="logo">
+  <div class="header">
+    <h1>Welcome to Sky0Cloud v4</h1>
+    <p>Next-gen cloud & community hub inside Element</p>
+  </div>
+
+  <!-- CTA Buttons -->
+  <div>
+    <button class="btn-primary">Create Account</button>
+    <button class="btn-secondary">Sign In</button>
+  </div>
+
+  <!-- Info Cards -->
+  <div class="cards">
+    <div class="card"><h3>🚀 Getting Started</h3><p>Learn how to join and connect instantly.</p></div>
+    <div class="card"><h3>📜 Rules</h3><p>Stay safe and follow guidelines.</p></div>
+    <div class="card"><h3>🌐 Services</h3><p>Explore hosting and cloud tools.</p></div>
+    <div class="card"><h3>💬 Community</h3><p>Join discussions and meet other users.</p></div>
+  </div>
+
+  <!-- Language Picker -->
+  <select class="language-select">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+    <option value="zh">中文</option>
+  </select>
+
+  <!-- Notification Button -->
+  <button class="notify-btn" onclick="Notification.requestPermission()">Enable Notifications</button>
+</div>
+</body>
+</html>
