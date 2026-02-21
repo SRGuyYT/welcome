@@ -566,6 +566,93 @@
       gap: var(--space-4);
     }
 
+    .service-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .service-search {
+      flex: 1 1 230px;
+      min-width: 220px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 0.55rem 0.85rem;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: var(--space-3);
+    }
+
+    .service-card {
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: grid;
+      gap: var(--space-2);
+      min-height: 145px;
+      transition: transform var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+    }
+
+    .service-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(118, 169, 255, 0.42);
+    }
+
+    .service-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+    }
+
+    .service-name {
+      margin: 0;
+      font-size: 0.95rem;
+      word-break: break-word;
+    }
+
+    .service-meta {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      word-break: break-word;
+    }
+
+    .health-pill {
+      font-size: 0.72rem;
+      border-radius: var(--radius-pill);
+      padding: 0.22rem 0.6rem;
+      border: 1px solid;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .health-pill.up {
+      color: #9effe6;
+      border-color: rgba(29, 233, 182, 0.55);
+      background: rgba(29, 233, 182, 0.14);
+    }
+
+    .health-pill.healthy {
+      color: #8bd6ff;
+      border-color: rgba(118, 169, 255, 0.58);
+      background: rgba(118, 169, 255, 0.16);
+    }
+
+    .health-pill.unknown {
+      color: #ffe39b;
+      border-color: rgba(248, 213, 79, 0.58);
+      background: rgba(248, 213, 79, 0.14);
+    }
+
     .status-row {
       display: flex;
       align-items: center;
@@ -598,6 +685,17 @@
       gap: var(--space-3);
       align-items: center;
     }
+
+    .admin-panel,
+    .infra-panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      padding: var(--space-4);
+      display: grid;
+      gap: var(--space-3);
+    }
+
 
     .select {
       border-radius: var(--radius-pill);
@@ -845,29 +943,59 @@
         <section class="section" id="status" aria-labelledby="statusTitle">
           <div class="section-head">
             <div>
-              <h2 id="statusTitle" class="section-title">Service Status & Preferences</h2>
-              <p class="section-subtitle">At-a-glance service confidence and user preferences for language and notification behavior.</p>
+              <h2 id="statusTitle" class="section-title">Service Status & Admin Control</h2>
+              <p class="section-subtitle">Live visibility for Sky0Cloud core services, plus static-site-safe admin controls and infrastructure checklist.</p>
             </div>
           </div>
 
           <article class="status-panel glass" aria-label="System health panel">
             <div class="status-row">
               <strong>Core service health</strong>
-              <span class="chip"><span class="dot-live" aria-hidden="true"></span> Operational</span>
+              <span class="chip"><span class="dot-live" aria-hidden="true"></span> Operational (3/3 core containers up)</span>
             </div>
             <div class="progress" aria-label="Service uptime progress">
-              <span></span>
+              <span id="overallUptimeBar"></span>
             </div>
+
+            <div class="service-toolbar" aria-label="Service list controls">
+              <input id="serviceSearch" class="service-search" type="search" placeholder="Filter services by name, image, or port…" aria-label="Filter service status list" />
+              <span class="chip" id="serviceCount" aria-live="polite">Showing 0 services</span>
+            </div>
+
+            <section id="serviceGrid" class="service-grid" aria-label="Sky0Cloud container services"></section>
+
             <div class="settings-row">
-              <label for="langSelect" class="sr-only">Select language</label>
-              <select id="langSelect" class="select" aria-label="Select language">
-                <option value="en" selected>English</option>
-                <option value="es">Español</option>
-                <option value="de">Deutsch</option>
-                <option value="fr">Français</option>
-              </select>
+              <a class="btn btn-primary" href="https://ssh.sky0cloud.dpdns.org" target="_blank" rel="noopener noreferrer" aria-label="Open Sky0Cloud SSH admin endpoint">Open Admin SSH URL</a>
               <button class="btn btn-secondary" id="accessibilityBtn" type="button">Accessibility Tips</button>
             </div>
+
+            <section class="admin-panel" aria-label="Admin controls">
+              <h3 class="section-title" style="font-size:1.05rem; margin:0;">Admin Panel (Static Demo)</h3>
+              <p class="section-subtitle">Username: <strong>admin</strong> · Password: <strong>admin</strong> · Endpoint: <a href="https://ssh.sky0cloud.dpdns.org" target="_blank" rel="noopener noreferrer">ssh.sky0cloud.dpdns.org</a></p>
+              <p class="section-subtitle">Note: GitHub Pages is static-only, so these controls are preview/UI state and do not enforce server-level blocking by themselves.</p>
+              <div class="settings-row">
+                <button class="btn btn-secondary" id="blockAllBtn" type="button">Block All Requests (Preview)</button>
+                <button class="btn btn-secondary" id="allowAdminBtn" type="button">Always Allow Admin GUI/Web (Preview)</button>
+                <button class="btn btn-secondary" id="toggleEditorBtn" type="button">Enable In-Site Editor (Preview)</button>
+              </div>
+              <div class="settings-row">
+                <label class="sr-only" for="blockScreenMessage">Custom block screen message</label>
+                <input id="blockScreenMessage" class="service-search" type="text" placeholder="Custom block-screen message" aria-label="Custom block-screen message" />
+                <button class="btn btn-secondary" id="applyBlockScreenBtn" type="button">Apply Block Screen Message</button>
+              </div>
+              <p id="adminStateText" class="section-subtitle" aria-live="polite">Admin state: normal mode.</p>
+            </section>
+
+            <section class="infra-panel" aria-label="Cloudflare requirements">
+              <h3 class="section-title" style="font-size:1.05rem; margin:0;">Cloudflared / External Requirements</h3>
+              <ul class="section-subtitle" style="margin:0; padding-left:1.1rem;">
+                <li>Cloudflare DNS: proxied CNAME/A records for <code>sky0cloud.dpdns.org</code> and <code>ssh.sky0cloud.dpdns.org</code>.</li>
+                <li>Cloudflare Tunnel: routes for HTTP(S) services and SSH target mapping to your local server.</li>
+                <li>TLS: valid certificates (Cloudflare edge + origin cert if required).</li>
+                <li>Google integrations (optional): OAuth client credentials, Search Console verification, and SMTP relay/app password if using Google mail delivery.</li>
+                <li>Firewall & Access: allow only needed ports; optionally place admin endpoints behind Cloudflare Access policies.</li>
+              </ul>
+            </section>
           </article>
         </section>
       </main>
@@ -914,9 +1042,42 @@
       accessibilityBtn: document.getElementById('accessibilityBtn'),
       envNote: document.getElementById('envNote'),
       year: document.getElementById('year'),
-      langSelect: document.getElementById('langSelect'),
       canvas: document.getElementById('ambientCanvas'),
+      serviceSearch: document.getElementById('serviceSearch'),
+      serviceGrid: document.getElementById('serviceGrid'),
+      serviceCount: document.getElementById('serviceCount'),
+      overallUptimeBar: document.getElementById('overallUptimeBar'),
+      blockAllBtn: document.getElementById('blockAllBtn'),
+      allowAdminBtn: document.getElementById('allowAdminBtn'),
+      toggleEditorBtn: document.getElementById('toggleEditorBtn'),
+      applyBlockScreenBtn: document.getElementById('applyBlockScreenBtn'),
+      blockScreenMessage: document.getElementById('blockScreenMessage'),
+      adminStateText: document.getElementById('adminStateText'),
     };
+
+    const sky0cloudServices = [
+      {
+        name: 'caddy-proxy',
+        image: 'caddy:latest',
+        status: 'Up',
+        health: 'unknown',
+        ports: '443/tcp, 2019/tcp, 443/udp, 0.0.0.0:8081→80, [::]:8081→80',
+      },
+      {
+        name: 'element-skyservers',
+        image: 'vectorim/element-web:latest',
+        status: 'Up',
+        health: 'healthy',
+        ports: '8080/tcp',
+      },
+      {
+        name: 'conduwuit-skyservers',
+        image: 'forgejo.ellis.link/continuwuation/continuwuity:latest',
+        status: 'Up',
+        health: 'unknown',
+        ports: '0.0.0.0:6167→8008/tcp, [::]:6167→8008/tcp',
+      },
+    ];
 
     // Auto-forward if existing auth token exists.
     (function redirectIfAuthenticated() {
@@ -996,17 +1157,53 @@
       alert(message);
     }
 
-    function onLanguageChange(event) {
-      const selected = event.target.value;
-      localStorage.setItem('sky0cloud-lang', selected);
+
+    function formatHealthLabel(health) {
+      if (health === 'healthy') return 'healthy';
+      if (health === 'up') return 'up';
+      return 'no healthcheck';
     }
 
-    function initializeLanguagePreference() {
-      const lang = localStorage.getItem('sky0cloud-lang');
-      if (lang) refs.langSelect.value = lang;
+    function renderServiceStatus(filter = '') {
+      const q = filter.trim().toLowerCase();
+      const filtered = sky0cloudServices.filter((service) => {
+        if (!q) return true;
+        return `${service.name} ${service.image} ${service.ports}`.toLowerCase().includes(q);
+      });
+
+      refs.serviceGrid.innerHTML = filtered.map((service) => `
+        <article class="service-card" tabindex="0" aria-label="${service.name} service status card">
+          <div class="service-top">
+            <h3 class="service-name">${service.name}</h3>
+            <span class="health-pill ${service.health}" aria-label="${formatHealthLabel(service.health)}">${formatHealthLabel(service.health)}</span>
+          </div>
+          <p class="service-meta"><strong>Image:</strong> ${service.image}</p>
+          <p class="service-meta"><strong>Status:</strong> ${service.status}</p>
+          <p class="service-meta"><strong>Ports:</strong> ${service.ports}</p>
+        </article>
+      `).join('');
+
+      refs.serviceCount.textContent = `Showing ${filtered.length} of ${sky0cloudServices.length} services`;
+
+      const upCount = sky0cloudServices.filter((service) => service.status.toLowerCase().startsWith('up')).length;
+      const uptime = Math.round((upCount / sky0cloudServices.length) * 100);
+      refs.overallUptimeBar.style.width = `${uptime}%`;
+      refs.overallUptimeBar.setAttribute('aria-label', `Overall uptime ${uptime}%`);
     }
 
-    // ----------------------------------------------------------------------
+    
+    const adminState = {
+      blocked: false,
+      allowAdmin: true,
+      editorEnabled: false,
+      blockMessage: 'Access temporarily restricted by administrator.',
+    };
+
+    function renderAdminState() {
+      refs.adminStateText.textContent = `Admin state: blocked=${adminState.blocked}, allowAdmin=${adminState.allowAdmin}, editorEnabled=${adminState.editorEnabled}, message="${adminState.blockMessage}"`;
+    }
+
+// ----------------------------------------------------------------------
     // 5) Ambient particle engine (canvas)
     // ----------------------------------------------------------------------
     const particleEngine = {
@@ -1160,7 +1357,26 @@
 
       refs.notifyBtn.addEventListener('click', enableNotifications);
       refs.accessibilityBtn.addEventListener('click', showAccessibilityTips);
-      refs.langSelect.addEventListener('change', onLanguageChange);
+      refs.serviceSearch.addEventListener('input', (event) => {
+        renderServiceStatus(event.target.value);
+      });
+
+      refs.blockAllBtn.addEventListener('click', () => {
+        adminState.blocked = !adminState.blocked;
+        renderAdminState();
+      });
+      refs.allowAdminBtn.addEventListener('click', () => {
+        adminState.allowAdmin = !adminState.allowAdmin;
+        renderAdminState();
+      });
+      refs.toggleEditorBtn.addEventListener('click', () => {
+        adminState.editorEnabled = !adminState.editorEnabled;
+        renderAdminState();
+      });
+      refs.applyBlockScreenBtn.addEventListener('click', () => {
+        adminState.blockMessage = refs.blockScreenMessage.value.trim() || adminState.blockMessage;
+        renderAdminState();
+      });
 
       window.addEventListener('resize', () => {
         const prev = appState.deviceType;
@@ -1182,9 +1398,10 @@
 
     function init() {
       initializeTheme();
-      initializeLanguagePreference();
       applyDeviceMode();
       bindEvents();
+      renderServiceStatus();
+      renderAdminState();
       particleEngine.init();
       refs.year.textContent = new Date().getFullYear();
     }
